@@ -1,0 +1,38 @@
+{
+  "name": "AppClean Codespace",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "forwardPorts": [5223, 3000, 3001, 4200],
+  "portsAttributes": {
+    "5223": {
+      "label": "API Backend",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Frontend JS",
+      "onAutoForward": "notify"
+    },
+    "3001": {
+      "label": "Frontend Alternativo",
+      "onAutoForward": "notify"
+    },
+    "4200": {
+      "label": "Angular",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "dotnet restore MiApp.slnx"
+}

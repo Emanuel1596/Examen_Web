@@ -1,0 +1,41 @@
+meta {
+  name: Login Reader
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "reader@miapp.com",
+    "password": "Reader123!"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    const token = res.getBody().token;
+    const role = res.getBody().role;
+    bru.setEnvVar("jwt", token);
+    console.log("Token guardado. Rol:", role);
+  }
+}
+
+tests {
+  test("Login exitoso", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Respuesta tiene token", function() {
+    expect(res.getBody()).to.have.property("token");
+  });
+
+  test("Rol es Reader", function() {
+    expect(res.getBody().role).to.equal("Reader");
+  });
+}

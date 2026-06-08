@@ -1,0 +1,24 @@
+meta {
+  name: Reader - Contenido
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/reader/content
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt}}
+}
+
+tests {
+  test("Devuelve 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Respuesta tiene articles", function() {
+    expect(res.getBody()).to.have.property("articles");
+  });
+}

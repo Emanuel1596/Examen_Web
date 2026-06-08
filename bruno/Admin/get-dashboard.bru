@@ -1,0 +1,20 @@
+meta {
+  name: Admin - Dashboard
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/admin/dashboard
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt}}
+}
+
+tests {
+  test("Devuelve 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}

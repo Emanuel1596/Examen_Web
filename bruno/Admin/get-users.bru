@@ -1,0 +1,24 @@
+meta {
+  name: Admin - Listar Usuarios
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/admin/users
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt}}
+}
+
+tests {
+  test("Devuelve 200", function() {
+    expect(res.status).to.equal(200);
+  });
+
+  test("Respuesta es un array", function() {
+    expect(res.getBody()).to.be.an("array");
+  });
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Admin - Acceso Denegado con token Reader
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/admin/users
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt}}
+}
+
+tests {
+  test("Devuelve 403 con token de Reader", function() {
+    expect(res.status).to.equal(403);
+  });
+}
