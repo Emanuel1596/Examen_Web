@@ -19,9 +19,29 @@
     <section id="public-section">
       <h2>Eventos disponibles</h2>
 
-      <div class="search-box">
-        <input id="public-search" type="text" placeholder="Buscar evento">
+      <div class="filters">
+        <div class="filter-field">
+          <label>Nombre o descripción</label>
+          <input id="public-search" type="text" placeholder="Buscar evento">
+        </div>
+
+        <div class="filter-field">
+          <label>Lugar</label>
+          <input id="public-place" type="text" placeholder="Ejemplo: Auditorio">
+        </div>
+
+        <div class="filter-field">
+          <label>Desde</label>
+          <input id="public-date-from" type="date">
+        </div>
+
+        <div class="filter-field">
+          <label>Hasta</label>
+          <input id="public-date-to" type="date">
+        </div>
+
         <button onclick="loadPublicEvents()">Buscar</button>
+        <button class="secondary" onclick="clearPublicFilters()">Limpiar filtros</button>
       </div>
 
       <div id="public-events"></div>
@@ -65,14 +85,43 @@
 
         <div class="actions">
           <button onclick="saveEvent()">Guardar evento</button>
-          <button onclick="clearForm()">Limpiar</button>
+          <button class="secondary" onclick="clearForm()">Limpiar</button>
         </div>
 
         <h3>Eventos registrados</h3>
 
-        <div class="search-box">
-          <input id="admin-search" type="text" placeholder="Buscar evento">
+        <div class="filters">
+          <div class="filter-field">
+            <label>Nombre o descripción</label>
+            <input id="admin-search" type="text" placeholder="Buscar evento">
+          </div>
+
+          <div class="filter-field">
+            <label>Lugar</label>
+            <input id="admin-place" type="text" placeholder="Ejemplo: Auditorio">
+          </div>
+
+          <div class="filter-field">
+            <label>Estado</label>
+            <select id="admin-status">
+              <option value="">Todos los estados</option>
+              <option value="Activo">Activo</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label>Desde</label>
+            <input id="admin-date-from" type="date">
+          </div>
+
+          <div class="filter-field">
+            <label>Hasta</label>
+            <input id="admin-date-to" type="date">
+          </div>
+
           <button onclick="loadAdminEvents()">Buscar</button>
+          <button class="secondary" onclick="clearAdminFilters()">Limpiar filtros</button>
         </div>
 
         <div id="admin-events"></div>
@@ -83,6 +132,14 @@
       </div>
     </section>
   </main>
+
+  <div id="purchase-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Compra completada</h2>
+      <p id="purchase-message"></p>
+      <button onclick="closePurchaseModal()">Aceptar</button>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

@@ -86,12 +86,49 @@ function logout() {
   showPublic();
 }
 
+function buildPublicQueryString() {
+  const params = new URLSearchParams();
+
+  const search = document.getElementById("public-search")?.value.trim();
+  const place = document.getElementById("public-place")?.value.trim();
+  const dateFrom = document.getElementById("public-date-from")?.value;
+  const dateTo = document.getElementById("public-date-to")?.value;
+
+  if (search) params.append("search", search);
+  if (place) params.append("place", place);
+  if (dateFrom) params.append("dateFrom", dateFrom);
+  if (dateTo) params.append("dateTo", dateTo);
+
+  return params.toString();
+}
+
+function buildAdminQueryString() {
+  const params = new URLSearchParams();
+
+  const search = document.getElementById("admin-search")?.value.trim();
+  const place = document.getElementById("admin-place")?.value.trim();
+  const status = document.getElementById("admin-status")?.value;
+  const dateFrom = document.getElementById("admin-date-from")?.value;
+  const dateTo = document.getElementById("admin-date-to")?.value;
+
+  if (search) params.append("search", search);
+  if (place) params.append("place", place);
+  if (status) params.append("status", status);
+  if (dateFrom) params.append("dateFrom", dateFrom);
+  if (dateTo) params.append("dateTo", dateTo);
+
+  return params.toString();
+}
+
 async function loadPublicEvents() {
-  const search = document.getElementById("public-search")?.value || "";
   const container = document.getElementById("public-events");
+  const queryString = buildPublicQueryString();
+  const url = queryString
+    ? `${apiBaseUrl}/api/events/active?${queryString}`
+    : `${apiBaseUrl}/api/events/active`;
 
   try {
-    const response = await fetch(`${apiBaseUrl}/api/events/active?search=${encodeURIComponent(search)}`);
+    const response = await fetch(url);
 
     if (!response.ok) {
       container.innerHTML = `<p class="error">No se pudieron cargar los eventos.</p>`;
@@ -101,7 +138,7 @@ async function loadPublicEvents() {
     const events = await response.json();
 
     if (events.length === 0) {
-      container.innerHTML = "<p>No hay eventos activos.</p>";
+      container.innerHTML = "<p>No hay eventos activos con esos filtros.</p>";
       return;
     }
 
@@ -214,13 +251,23 @@ async function purchaseTicket(eventId) {
 
   const purchase = await response.json();
 
-  alert(`Compra realizada correctamente. Total: $${Number(purchase.total).toFixed(2)}`);
+  showPurchaseModal(
+    `Tu compra fue registrada correctamente. Compraste ${purchase.quantity} boleto(s) en zona ${purchase.zone}. Total pagado: $${Number(purchase.total).toFixed(2)}`
+  );
 
   loadDashboard();
 }
 
+function showPurchaseModal(message) {
+  document.getElementById("purchase-message").textContent = message;
+  document.getElementById("purchase-modal").classList.remove("hidden");
+}
+
+function closePurchaseModal() {
+  document.getElementById("purchase-modal").classList.add("hidden");
+}
+
 async function loadAdminEvents() {
-  const search = document.getElementById("admin-search")?.value || "";
   const container = document.getElementById("admin-events");
 
   if (!token) {
@@ -228,8 +275,13 @@ async function loadAdminEvents() {
     return;
   }
 
+  const queryString = buildAdminQueryString();
+  const url = queryString
+    ? `${apiBaseUrl}/api/events?${queryString}`
+    : `${apiBaseUrl}/api/events`;
+
   try {
-    const response = await fetch(`${apiBaseUrl}/api/events?search=${encodeURIComponent(search)}`, {
+    const response = await fetch(url, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -244,7 +296,7 @@ async function loadAdminEvents() {
     adminEventsCache = events;
 
     if (events.length === 0) {
-      container.innerHTML = "<p>No hay eventos registrados.</p>";
+      container.innerHTML = "<p>No hay eventos registrados con esos filtros.</p>";
       return;
     }
 
@@ -325,6 +377,16 @@ async function saveEvent() {
 
   if (vipPrice <= 0 || preferentePrice <= 0 || generalPrice <= 0) {
     alert("Los precios deben ser mayores a 0.");
+    return;
+  }
+
+  if (vipPrice === preferentePrice || vipPrice === generalPrice || preferentePrice === generalPrice) {
+    alert("Los precios de VIP, Preferente y General no pueden ser iguales.");
+    return;
+  }
+
+  if (!(vipPrice > preferentePrice && preferentePrice > generalPrice)) {
+    alert("El precio debe cumplir: VIP mayor que Preferente y Preferente mayor que General.");
     return;
   }
 
@@ -438,6 +500,23 @@ function clearForm() {
   document.getElementById("vip-price").value = "";
   document.getElementById("preferente-price").value = "";
   document.getElementById("general-price").value = "";
+}
+
+function clearPublicFilters() {
+  document.getElementById("public-search").value = "";
+  document.getElementById("public-place").value = "";
+  document.getElementById("public-date-from").value = "";
+  document.getElementById("public-date-to").value = "";
+  loadPublicEvents();
+}
+
+function clearAdminFilters() {
+  document.getElementById("admin-search").value = "";
+  document.getElementById("admin-place").value = "";
+  document.getElementById("admin-status").value = "";
+  document.getElementById("admin-date-from").value = "";
+  document.getElementById("admin-date-to").value = "";
+  loadAdminEvents();
 }
 
 function formatDate(value) {

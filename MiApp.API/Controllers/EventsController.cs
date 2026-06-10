@@ -19,17 +19,42 @@ public class EventsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAll([FromQuery] string? search)
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string? search,
+        [FromQuery] string? place,
+        [FromQuery] string? status,
+        [FromQuery] DateTime? dateFrom,
+        [FromQuery] DateTime? dateTo)
     {
-        var result = await _sender.Send(new GetEventsQuery(search, OnlyActive: false));
+        var result = await _sender.Send(new GetEventsQuery(
+            search,
+            OnlyActive: false,
+            place,
+            status,
+            dateFrom,
+            dateTo
+        ));
+
         return Ok(result);
     }
 
     [HttpGet("active")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetActive([FromQuery] string? search)
+    public async Task<IActionResult> GetActive(
+        [FromQuery] string? search,
+        [FromQuery] string? place,
+        [FromQuery] DateTime? dateFrom,
+        [FromQuery] DateTime? dateTo)
     {
-        var result = await _sender.Send(new GetEventsQuery(search, OnlyActive: true));
+        var result = await _sender.Send(new GetEventsQuery(
+            search,
+            OnlyActive: true,
+            place,
+            Status: "Activo",
+            dateFrom,
+            dateTo
+        ));
+
         return Ok(result);
     }
 

@@ -7,7 +7,11 @@ namespace MiApp.Application.Features.Events.Queries;
 
 public record GetEventsQuery(
     string? Search,
-    bool OnlyActive
+    bool OnlyActive,
+    string? Place,
+    string? Status,
+    DateTime? DateFrom,
+    DateTime? DateTo
 ) : IRequest<List<EventDto>>;
 
 public class GetEventsQueryHandler : IRequestHandler<GetEventsQuery, List<EventDto>>
@@ -24,7 +28,9 @@ public class GetEventsQueryHandler : IRequestHandler<GetEventsQuery, List<EventD
         var events = await _eventRepository.GetAllAsync(cancellationToken);
 
         if (request.OnlyActive)
+        {
             events = events.Where(e => e.Status == EventStatus.Activo).ToList();
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -35,6 +41,37 @@ public class GetEventsQueryHandler : IRequestHandler<GetEventsQuery, List<EventD
                     e.Name.ToLower().Contains(search) ||
                     e.Description.ToLower().Contains(search) ||
                     e.Place.ToLower().Contains(search))
+                .ToList();
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Place))
+        {
+            var place = request.Place.Trim().ToLower();
+
+            events = events
+                .Where(e => e.Place.ToLower().Contains(place))
+                .ToList();
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Status) &&
+            Enum.TryParse<EventStatus>(request.Status, ignoreCase: true, out var status))
+        {
+            events = events
+                .Where(e => e.Status == status)
+                .ToList();
+        }
+
+        if (request.DateFrom.HasValue)
+        {
+            events = events
+                .Where(e => e.Date.Date >= request.DateFrom.Value.Date)
+                .ToList();
+        }
+
+        if (request.DateTo.HasValue)
+        {
+            events = events
+                .Where(e => e.Date.Date <= request.DateTo.Value.Date)
                 .ToList();
         }
 

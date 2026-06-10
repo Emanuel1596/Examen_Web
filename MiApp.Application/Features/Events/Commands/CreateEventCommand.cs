@@ -35,12 +35,12 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Eve
             Date = request.Date,
             Place = request.Place.Trim(),
             Status = EventStatus.Activo,
-            TicketZones =
-            [
+            TicketZones = new List<TicketZone>
+            {
                 new TicketZone { Zone = TicketZoneType.VIP, Price = request.VipPrice },
                 new TicketZone { Zone = TicketZoneType.Preferente, Price = request.PreferentePrice },
                 new TicketZone { Zone = TicketZoneType.General, Price = request.GeneralPrice }
-            ]
+            }
         };
 
         await _eventRepository.AddAsync(eventEntity, cancellationToken);
@@ -76,5 +76,16 @@ public class CreateEventCommandValidator : AbstractValidator<CreateEventCommand>
 
         RuleFor(x => x.GeneralPrice)
             .GreaterThan(0).WithMessage("El precio General debe ser mayor a 0.");
+
+        RuleFor(x => x)
+            .Must(x => x.VipPrice != x.PreferentePrice &&
+                       x.VipPrice != x.GeneralPrice &&
+                       x.PreferentePrice != x.GeneralPrice)
+            .WithMessage("Los precios de VIP, Preferente y General no pueden ser iguales.");
+
+        RuleFor(x => x)
+            .Must(x => x.VipPrice > x.PreferentePrice &&
+                       x.PreferentePrice > x.GeneralPrice)
+            .WithMessage("El precio debe cumplir: VIP mayor que Preferente y Preferente mayor que General.");
     }
 }

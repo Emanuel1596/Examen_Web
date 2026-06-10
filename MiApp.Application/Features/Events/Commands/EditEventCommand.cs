@@ -88,5 +88,16 @@ public class EditEventCommandValidator : AbstractValidator<EditEventCommand>
 
         RuleFor(x => x.GeneralPrice)
             .GreaterThan(0).WithMessage("El precio General debe ser mayor a 0.");
+
+        RuleFor(x => x)
+            .Must(x => x.VipPrice != x.PreferentePrice &&
+                       x.VipPrice != x.GeneralPrice &&
+                       x.PreferentePrice != x.GeneralPrice)
+            .WithMessage("Los precios de VIP, Preferente y General no pueden ser iguales.");
+
+        RuleFor(x => x)
+            .Must(x => x.VipPrice > x.PreferentePrice &&
+                       x.PreferentePrice > x.GeneralPrice)
+            .WithMessage("El precio debe cumplir: VIP mayor que Preferente y Preferente mayor que General.");
     }
 }
