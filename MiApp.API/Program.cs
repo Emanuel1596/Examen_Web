@@ -68,12 +68,15 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+
     db.Database.EnsureCreated();
     await DbSeeder.SeedAsync(db, hasher);
 }
 
 if (app.Environment.IsDevelopment())
+{
     app.MapOpenApi();
+}
 
 app.UseCors("Frontend");
 app.UseExceptionHandler();

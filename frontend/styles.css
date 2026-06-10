@@ -1,0 +1,130 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #222;
+}
+
+header {
+  background: #1f2937;
+  color: white;
+  padding: 16px;
+}
+
+header h1 {
+  margin: 0 0 12px 0;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: #2563eb;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button.danger {
+  background: #dc2626;
+}
+
+button.danger:hover {
+  background: #b91c1c;
+}
+
+button.secondary {
+  background: #4b5563;
+}
+
+button.secondary:hover {
+  background: #374151;
+}
+
+main {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.zones {
+  margin: 10px 0;
+}
+
+.zone {
+  background: #eef2ff;
+  padding: 8px;
+  border-radius: 6px;
+  margin: 6px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-box input {
+  margin: 0;
+}
+
+#login-box,
+#admin-panel {
+  max-width: 900px;
+}
+
+.success {
+  color: #15803d;
+  font-weight: bold;
+}
+
+.error {
+  color: #b91c1c;
+  font-weight: bold;
+}

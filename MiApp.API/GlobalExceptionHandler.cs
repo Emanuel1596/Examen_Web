@@ -12,6 +12,9 @@ public class GlobalExceptionHandler : IExceptionHandler
         {
             ValidationException => (StatusCodes.Status400BadRequest, "Error de validación"),
             UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "No autorizado"),
+            KeyNotFoundException => (StatusCodes.Status404NotFound, "No encontrado"),
+            InvalidOperationException => (StatusCodes.Status400BadRequest, "Operación inválida"),
+            ArgumentException => (StatusCodes.Status400BadRequest, "Solicitud inválida"),
             _ => (StatusCodes.Status500InternalServerError, "Error interno del servidor")
         };
 

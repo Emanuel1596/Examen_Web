@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Venta de Boletos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Venta de Boletos</h1>
+    <nav>
+      <button onclick="showPublic()">Portal Público</button>
+      <button onclick="showAdmin()">Administración</button>
+      <button onclick="logout()">Cerrar sesión</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="public-section">
+      <h2>Eventos disponibles</h2>
+
+      <div class="search-box">
+        <input id="public-search" type="text" placeholder="Buscar evento">
+        <button onclick="loadPublicEvents()">Buscar</button>
+      </div>
+
+      <div id="public-events"></div>
+    </section>
+
+    <section id="admin-section" class="hidden">
+      <h2>Administración</h2>
+
+      <div id="login-box">
+        <h3>Login Admin</h3>
+        <input id="email" type="email" value="admin@miapp.com" placeholder="Correo">
+        <input id="password" type="password" value="Admin123!" placeholder="Contraseña">
+        <button onclick="login()">Iniciar sesión</button>
+      </div>
+
+      <div id="admin-panel" class="hidden">
+        <h3>Crear / Editar evento</h3>
+
+        <input id="event-id" type="hidden">
+
+        <label>Nombre</label>
+        <input id="event-name" type="text" placeholder="Nombre del evento">
+
+        <label>Descripción</label>
+        <textarea id="event-description" placeholder="Descripción"></textarea>
+
+        <label>Fecha</label>
+        <input id="event-date" type="datetime-local">
+
+        <label>Lugar</label>
+        <input id="event-place" type="text" placeholder="Lugar">
+
+        <label>Precio VIP</label>
+        <input id="vip-price" type="number" min="1" step="0.01">
+
+        <label>Precio Preferente</label>
+        <input id="preferente-price" type="number" min="1" step="0.01">
+
+        <label>Precio General</label>
+        <input id="general-price" type="number" min="1" step="0.01">
+
+        <div class="actions">
+          <button onclick="saveEvent()">Guardar evento</button>
+          <button onclick="clearForm()">Limpiar</button>
+        </div>
+
+        <h3>Eventos registrados</h3>
+
+        <div class="search-box">
+          <input id="admin-search" type="text" placeholder="Buscar evento">
+          <button onclick="loadAdminEvents()">Buscar</button>
+        </div>
+
+        <div id="admin-events"></div>
+
+        <h3>Dashboard de ventas</h3>
+        <button onclick="loadDashboard()">Actualizar dashboard</button>
+        <div id="dashboard"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
